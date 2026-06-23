@@ -1,0 +1,26 @@
+name: Deploy Laravel to Hostinger
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd ~/domains/mazaydarbe.dwrylight.com
+            git pull origin main
+            composer install --no-dev --optimize-autoloader
+            php artisan config:cache
+            php artisan route:cache
+            php artisan migrate --force
+            echo "Deploy complete ✓"
