@@ -3,7 +3,7 @@ name: Deploy Laravel to Hostinger
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   deploy:
@@ -17,8 +17,8 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd ~/domains/mazaydarbe.dwrylight.com
-            git pull origin main
+            cd ~/domains/dwrylight.com/public_html
+            git pull origin master
             composer install --no-dev --optimize-autoloader
             php artisan config:cache
             php artisan route:cache
